@@ -8,7 +8,7 @@ Light up puzzle instances d1.lup and d2.lup should be used for all comparisons. 
 #	Coding Standards	#
 #################################
 
-You are free to use any of the following programming languages for your submission : 
+You are free to use any of the following programming languages for your submission :
 	- Python 3
 	- C++
 	- C#
@@ -30,10 +30,45 @@ Late submissions will be penalized 5% for the first 24 hour period and an additi
 
 Your final submission must include the script "run.sh" which should compile and run your code.
 
-Your script should run on a standard linux machines with the following commands : 
+Your script should run on a standard linux machines with the following commands :
 ```
 ./run.sh problem_filepath
 ```
 ```
 ./run.sh problem_filepath optional_config_filepath
 ```
+
+#################################
+#       Config File Format			#
+#################################\
+The config file is a json file set up with the following paramaters:
+
+givenSeed: (Optional) An integer that is used as the random seed if present in the config file. If givenSeed is not present in the config file then a random seed will be chosen based on the time in microseconds.\
+searchAlgorithm: (Required) A string indicating which algorithm to run. Currently the two choices are: "EA" or "Random Search".\
+numOfRuns: (Required) An integer value indicating the number of times the selected algorithm should run.
+
+numOfFitnessEvals: (Required) An integer indicating the number of fitness evaluations per run.\
+noChangeForNEvals: (Optional) An integer indicating the number of evaluations in a row to be completed without any increase in the best overall fitness for that run. (Note: Configuration parameter numOfFitnessEvals is still required and used to make sure of eventual termination.)
+
+mutationRate: An integer greater than one indicating the mutation rate. Each gene in each offspring genotype will have a 1 in mutationRate chance of being mutated. For example, if there are 100 genes on one genotype and mutationRate = 50, then approximately 2 genes per offspring genotype will be mutated.
+
+parentTournyK: (Optional) An integer k indicating the size of random tournaments used to select parents. Minimum tournament size is 2. If missing, Fitness Proportional Selection is automatically used to select parents./
+survivalTournyK: (Optional) An integer k indicating the size of random tournaments used to select survivors. Minimum tournament size is 2. If missing, Truncation is automatically used to select survivors.
+
+mu: (Required) An integer indicating the size of each run's initial population and the size of each population that survives to the next generation.\
+lambda: (Required) An integer indicating the number of offspring created per generation.
+
+parentFitnessProp: (Required) Boolean indicating whether or not to use fitness Proportional when deciding parents.\
+parentUniform: (Required) Boolean indicating whether or not to use uniform random when deciding parents.
+
+commaSurvival: (Required) Boolean whether or not to use Comma survival strategy
+
+survivalTruncation: (Required) Boolean indicating whether or not to use truncation when deciding survival.\
+survivalUniform: (Required) Boolean indicating whether or not to use uniform random when deciding survival.\
+survivalFitnessProp: (Required) Boolean indicating whether or not to use fitness proportional when deciding survival.\
+
+logPath: (Required) A string designating the path of the log file to be created.\
+solPath: (Required) A string designating the path of the solution file to be created.\
+enforceBlackCellConstraint: (Required) A boolean indicating whether or not to enforce the black cell constraint for the light up puzzle.
+
+The defaults for this can be seen in configs/defaultConfig.json

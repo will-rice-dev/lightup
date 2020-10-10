@@ -65,23 +65,20 @@ def survivalFitnessProp(population, board, config):
     newPop = []
 
     weights = [0 for _ in range(len(population))]
-    totalWithScores = 0
 
+    minScore = 0
     for i in range(len(population)):
         curScore = population[i].score
-        if curScore > 0:
-            totalWithScores += 1
+        if curScore < minScore:
+            minScore = curScore
         weights[i] = curScore
 
-    # This is to ensure that the right number of genotypes are chosen.
-    #   In Python Random choices method, when weights is filled with all
-    #   zeros, it does not do a uniform random selection, so this emmulates that.
-    #   For example, in the case of [0.5, 1e-99, 1e-99], the 0.5 will
-    #   almost certainly be chosen first, but once it is removed, it will be a
-    #   coin toss as to which element is chosen next.
-    if totalWithScores < config["mu"]:
-        for i in range(len(weights)):
-            weights[i] += 1e-99
+    # The minScore ensures that all weights are at least 1e-99. This
+    #   now allows for negative fitnesses. Each weight gets the minScore
+    #   value (either negative or zero) subtracted from it so that each weight
+    #   goes up proportionally.
+    weights = [weight - minScore + 1e-99 for weight in weights]
+    print(minScore)
 
     for i in range(config["mu"]):
         survivor = random.choices(population, weights=weights, k=1)
@@ -115,18 +112,18 @@ def parentFitnessProp(population, board, config, offspring):
     weights = [0 for _ in range(len(population))]
     totalWithScores = 0
 
+    minScore = 0
     for i in range(len(population)):
         curScore = population[i].score
-        if curScore > 0:
-            totalWithScores += 1
+        if curScore < minScore:
+            minScore = curScore
         weights[i] = curScore
 
-    # This is to ensure that the edge case with 1 or 0 valid parents can still
-    #   be completed. It sets every weight to the same value to ensure that
-    #   Different parents can be chosen.
-    if totalWithScores < 2:
-        for i in range(len(weights)):
-            weights[i] = 1 / len(weights)
+    # The minScore ensures that all weights are at least 1e-99. This
+    #   now allows for negative fitnesses. Each weight gets the minScore
+    #   value (either negative or zero) subtracted from it so that each weight
+    #   goes up proportionally.
+    weights = [weight - minScore + 1e-99 for weight in weights]
 
     for i in range(config["lambda"]):
         pick1 = random.choices(population, weights=weights, k=1)

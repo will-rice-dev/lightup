@@ -26,7 +26,10 @@ class IndividualGenotype:
         if brandNew:
             self.randomizeGenes()
             self.sol = self.generateSol(board, config)
-            self.score = self.sol.score
+            if "MOEA" == config["searchAlgorithm"]:
+                self.moea = self.sol.moea
+            else:
+                self.score = self.sol.score
 
     # Chooses a random number of lights to place and places them in random spots.
     def randomizeGenes(self):
@@ -74,6 +77,12 @@ class IndividualGenotype:
         # Sets the new genotype and evaluates it.
         baby.genotype = newGenotype
         baby.sol = baby.generateSol(self.board, self.config)
-        baby.score = baby.sol.score
+        if "MOEA" == self.config["searchAlgorithm"]:
+            baby.moea = baby.sol.moea
+        else:
+            baby.score = baby.sol.score
 
         return baby
+
+    def __str__(self):
+        return str(self.moea)

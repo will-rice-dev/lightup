@@ -3,6 +3,7 @@ from sys import argv
 from src.board import Board
 from src.randomSearch import runAllRandom
 from src.randomEA import runAllEA
+from src.randomMOEA import runAllMOEA
 import json
 import random
 from datetime import datetime
@@ -35,6 +36,8 @@ def main():
         logTxt, solTxt = runAllRandom(board, config, probPath)
     elif config["searchAlgorithm"] == "EA":
         logTxt, solTxt = runAllEA(board, config, probPath)
+    elif config["searchAlgorithm"] == "MOEA":
+        logTxt, solTxt = runAllMOEA(board, config, probPath)
 
     writeFile(config["logPath"], logTxt)
 

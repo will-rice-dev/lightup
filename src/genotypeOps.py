@@ -78,7 +78,6 @@ def survivalFitnessProp(population, board, config):
     #   value (either negative or zero) subtracted from it so that each weight
     #   goes up proportionally.
     weights = [weight - minScore + 1e-99 for weight in weights]
-    print(minScore)
 
     for i in range(config["mu"]):
         survivor = random.choices(population, weights=weights, k=1)

@@ -37,13 +37,23 @@ class SolutionBoard:
         self.placeLights()
 
         # Later going to be added to and multiplied by penalty coefficient.
-        self.violations = 0
+        self.lightViolations = 0
+        self.blackCellViolations = 0
+        self.violations = self.lightViolations + self.blackCellViolations
         self.isValid = True
 
         # Really should be called fitness, but ran out of time to change
         # throughout the whole code.
-        self.score = self.getScore()
+        self.setLitCount()
 
+        if "MOEA" == config["searchAlgorithm"]:
+            firstObj = self.litCount
+            secondObj = 1 / (self.lightViolations + 1) # Add one to avoid 1/0
+            thirdObj = 1 / (self.blackCellViolations + 1) # Add one to avoid 1/0
+            self.moea = (firstObj, secondObj, thirdObj)
+            return
+
+        self.score = self.litCount
         self.penalize()
         # I do this here to make the penalty function easier to tune.
         #   It is a lot harder to tune decimal penalty coefficients.
@@ -53,8 +63,6 @@ class SolutionBoard:
         if "penaltyCoefficient" in self.config:
             penalty = self.violations * self.config["penaltyCoefficient"]
             self.score -= penalty
-            """if self.score < 0:
-                self.score = 0"""
             if self.violations > 0:
                 self.isValid = False
         else:
@@ -65,7 +73,7 @@ class SolutionBoard:
         for x, y in self.lightPositions:
             self.board[x][y] = 10
 
-    def getScore(self):
+    def setLitCount(self):
         # Checks to see if the config is enforcing the black number constraint.
         if self.config["enforceBlackCellConstraint"]:
             self.isBlackCellValid() # Increases the number of violations.
@@ -78,10 +86,6 @@ class SolutionBoard:
             self.upY(x, y)
             self.downY(x, y)
 
-        # I decided to make the score a fraction of the number of lit spaces
-        # over the number of total white cells
-        return self.litCount
-
     # The next four functions go through the board for each light and "light up"
     # the surrounding cells. If they run into another light, the functions
     # will return True, triggering the score to become zero.
@@ -90,7 +94,7 @@ class SolutionBoard:
         while tempX != self.xLimit:
             cellVal = self.board[tempX][y]
             if cellVal == 10:
-                self.violations += 1
+                self.lightViolations += 1
                 break
             elif cellVal  >= 0:
                 break
@@ -104,7 +108,7 @@ class SolutionBoard:
         while tempY != self.yLimit:
             cellVal = self.board[x][tempY]
             if cellVal == 10:
-                self.violations += 1
+                self.lightViolations += 1
                 break
             elif cellVal  >= 0:
                 break
@@ -118,7 +122,7 @@ class SolutionBoard:
         while tempX != -1:
             cellVal = self.board[tempX][y]
             if cellVal == 10:
-                self.violations += 1
+                self.lightViolations += 1
                 break
             elif cellVal  >= 0:
                 break
@@ -132,7 +136,7 @@ class SolutionBoard:
         while tempY != -1:
             cellVal = self.board[x][tempY]
             if cellVal == 10:
-                self.violations += 1
+                self.lightViolations += 1
                 break
             elif cellVal  >= 0:
                 break
@@ -169,7 +173,7 @@ class SolutionBoard:
                     neighboringLights += 1
 
             if neighboringLights != cellVal:
-                self.violations += abs(neighboringLights - cellVal)
+                self.blackCellViolations += abs(neighboringLights - cellVal)
 
     # Returns the positions of the placed lights in a format
     # suitable for the solution output file.

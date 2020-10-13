@@ -42,7 +42,7 @@ def runAllMOEA(board, config, probPath):
     # This will return a string of text that can be put onto the end
     #   of the solution output file.
     #solTxt = bestSolOfAllRuns.sol.getTxt()
-    solTxt = ""
+    solTxt = getSolTxt(bestLevelOfAllRuns)
     return log, solTxt
 
 def singleRunMOEA(board, config, baseGenotype):
@@ -117,3 +117,13 @@ def evalPopulation(population):
     total3 /= len(population)
 
     return total1, best1, total2, best2, total3, best3
+
+def getSolTxt(level):
+    solTxt = ""
+    numOfSols = len(level)
+    for ind in level:
+        moea = ind.moea
+        solTxt += f"{moea[0]}\t{moea[1]}\t{moea[2]}\t{numOfSols}\n"
+        solTxt += ind.sol.getMOEATxt()
+
+    return solTxt

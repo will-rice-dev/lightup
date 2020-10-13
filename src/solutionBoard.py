@@ -185,3 +185,12 @@ class SolutionBoard:
             y += 1
             lightsReturn += str(x) + " " + str(y) + "\n"
         return lightsReturn
+
+    def getMOEATxt(self):
+        lights = sorted(self.lightPositions)
+        lightsReturn = ""
+        for x, y in lights:
+            x += 1
+            y += 1
+            lightsReturn += str(x) + " " + str(y) + "\n"
+        return lightsReturn

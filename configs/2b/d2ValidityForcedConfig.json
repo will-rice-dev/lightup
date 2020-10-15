@@ -1,5 +1,6 @@
 {"searchAlgorithm": "MOEA",
   "numOfRuns": 30,
+  "noChangeForNEvals": 2000,
 
   "parentFitnessProp": true,
   "parentUniform": false,

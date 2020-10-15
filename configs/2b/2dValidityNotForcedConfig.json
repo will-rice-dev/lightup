@@ -1,5 +1,6 @@
 {"searchAlgorithm": "MOEA",
   "numOfRuns": 30,
+  "noChangeForNEvals": 2000,
 
   "parentFitnessProp": true,
   "parentUniform": false,
@@ -17,6 +18,6 @@
   "solPath": "solutions/defaultSolution.txt",
   "enforceBlackCellConstraint": true,
 
-  "validityForcedInit": true,
+  "validityForcedInit": false,
   "numOfFitnessEvals": 10000,
   "mutationRate": 1000}

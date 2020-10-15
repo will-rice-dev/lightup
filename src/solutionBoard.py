@@ -47,9 +47,9 @@ class SolutionBoard:
         self.setLitCount()
 
         if "MOEA" == config["searchAlgorithm"]:
-            firstObj = self.litCount
-            secondObj = 1 / (self.lightViolations + 1) # Add one to avoid 1/0
-            thirdObj = 1 / (self.blackCellViolations + 1) # Add one to avoid 1/0
+            firstObj = self.litCount / self.whiteCount
+            secondObj = 1 / (self.lightViolations * 0.5 + 1) # Add one to avoid 1/0
+            thirdObj = 1 / (self.blackCellViolations * 0.5 + 1) # Add one to avoid 1/0
             self.moea = (firstObj, secondObj, thirdObj)
             return
 

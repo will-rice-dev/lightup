@@ -1,5 +1,6 @@
 {"searchAlgorithm": "MOEA",
   "numOfRuns": 30,
+  "noChangeForNEvals": 2000,
 
   "parentFitnessProp": true,
   "parentUniform": false,
@@ -9,9 +10,9 @@
   "survivalFitnessProp": false,
 
 
-  "commaSurvival": false,
+  "commaSurvival": true,
   "mu": 100,
-  "lambda": 100,
+  "lambda": 500,
 
   "logPath": "logs/defaultLog.txt",
   "solPath": "solutions/defaultSolution.txt",

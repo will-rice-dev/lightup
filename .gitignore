@@ -1,6 +1,9 @@
 # Folder used to make different config files for testing
 configMaker/
+
+# Files used in helping write the report.
 solReader.py
+move.py
 
 # Removing because it is not necessary and is not present below
 .DS_Store
